@@ -10,9 +10,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_11_084319) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_11_092728) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "categories", force: :cascade do |t|
+    t.string "name", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_categories_on_name", unique: true
+  end
 
   create_table "sessions", force: :cascade do |t|
     t.bigint "user_id", null: false
@@ -21,6 +28,23 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_11_084319) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_sessions_on_user_id"
+  end
+
+  create_table "tickets", force: :cascade do |t|
+    t.string "title", null: false
+    t.text "body", null: false
+    t.integer "status", default: 0, null: false
+    t.integer "priority", default: 1, null: false
+    t.bigint "requester_id", null: false
+    t.bigint "assignee_id"
+    t.bigint "category_id"
+    t.datetime "resolved_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["assignee_id"], name: "index_tickets_on_assignee_id"
+    t.index ["category_id"], name: "index_tickets_on_category_id"
+    t.index ["requester_id"], name: "index_tickets_on_requester_id"
+    t.index ["status"], name: "index_tickets_on_status"
   end
 
   create_table "users", force: :cascade do |t|
@@ -34,4 +58,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_11_084319) do
   end
 
   add_foreign_key "sessions", "users"
+  add_foreign_key "tickets", "categories"
+  add_foreign_key "tickets", "users", column: "assignee_id"
+  add_foreign_key "tickets", "users", column: "requester_id"
 end
