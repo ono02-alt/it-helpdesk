@@ -46,4 +46,18 @@ RSpec.describe User, type: :model do
       expect(build(:user, role: "boss")).not_to be_valid
     end
   end
+
+  describe "#staff?" do
+    it "一般社員はfalse" do
+      expect(build(:user).staff?).to be false
+    end
+
+    it "IT担当者はtrue" do
+      expect(build(:user, :it_staff).staff?).to be true
+    end
+
+    it "管理者はtrue" do
+      expect(build(:user, :admin).staff?).to be true
+    end
+  end
 end

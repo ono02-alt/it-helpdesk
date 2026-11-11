@@ -57,3 +57,5 @@ gem "factory_bot_rails", "~> 6.5", groups: [:development, :test]
 gem "shoulda-matchers", "~> 8.0", group: :test
 
 gem "capybara", "~> 3.40", group: :test
+
+gem "pundit", "~> 2.5"
