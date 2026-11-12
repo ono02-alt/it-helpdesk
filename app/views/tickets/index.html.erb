@@ -1,0 +1,30 @@
+<h1>問い合わせ一覧</h1>
+
+<p><%= link_to "新規問い合わせ", new_ticket_path %></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>件名</th>
+      <th>状態</th>
+      <th>優先度</th>
+      <th>依頼者</th>
+      <th>担当者</th>
+      <th>受付日時</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @tickets.each do |ticket| %>
+      <tr>
+        <td><%= ticket.id %></td>
+        <td><%= link_to ticket.title, ticket %></td>
+        <td><%= ticket.status %></td>
+        <td><%= ticket.priority %></td>
+        <td><%= ticket.requester.name %></td>
+        <td><%= ticket.assignee&.name || "未割当" %></td>
+        <td><%= l ticket.created_at, format: :short %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

@@ -1,0 +1,28 @@
+<%= form_with model: ticket do |form| %>
+  <% if ticket.errors.any? %>
+    <ul>
+      <% ticket.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+    </ul>
+  <% end %>
+
+  <div>
+    <%= form.label :title, "件名" %><br>
+    <%= form.text_field :title %>
+  </div>
+
+  <div>
+    <%= form.label :body, "内容" %><br>
+    <%= form.text_area :body, rows: 6 %>
+  </div>
+
+  <div>
+    <%= form.label :priority, "優先度" %><br>
+    <%= form.select :priority, Ticket.priorities.keys %>
+  </div>
+
+  <div>
+    <%= form.submit "登録する" %>
+  </div>
+<% end %>

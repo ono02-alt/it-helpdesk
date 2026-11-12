@@ -1,0 +1,21 @@
+<h1><%= @ticket.title %></h1>
+
+<dl>
+  <dt>状態</dt>
+  <dd><%= @ticket.status %></dd>
+  <dt>優先度</dt>
+  <dd><%= @ticket.priority %></dd>
+  <dt>依頼者</dt>
+  <dd><%= @ticket.requester.name %></dd>
+  <dt>担当者</dt>
+  <dd><%= @ticket.assignee&.name || "未割当" %></dd>
+  <dt>カテゴリ</dt>
+  <dd><%= @ticket.category&.name || "未分類" %></dd>
+  <dt>受付日時</dt>
+  <dd><%= l @ticket.created_at, format: :short %></dd>
+</dl>
+
+<h2>内容</h2>
+<%= simple_format(h(@ticket.body)) %>
+
+<p><%= link_to "一覧に戻る", tickets_path %></p>

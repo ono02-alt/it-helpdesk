@@ -24,6 +24,16 @@
   </head>
 
   <body>
+    <% if Current.user %>
+      <nav>
+        <%= link_to "問い合わせ一覧", root_path %>
+        <%= button_to "ログアウト", session_path, method: :delete %>
+      </nav>
+    <% end %>
+
+    <% if notice %><p><%= notice %></p><% end %>
+    <% if alert %><p><%= alert %></p><% end %>
+
     <%= yield %>
   </body>
 </html>
