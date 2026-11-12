@@ -1,0 +1,83 @@
+version: 2.1
+
+executors:
+  rails:
+    docker:
+      - image: cimg/ruby:3.4
+        environment:
+          RAILS_ENV: test
+          DB_HOST: 127.0.0.1
+          DB_USER: postgres
+          DB_PASSWORD: password
+          BUNDLE_PATH: vendor/bundle
+      - image: postgres:17
+        environment:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: password
+  ruby_only:
+    docker:
+      - image: cimg/ruby:3.4
+        environment:
+          BUNDLE_PATH: vendor/bundle
+
+commands:
+  install_gems:
+    steps:
+      - run:
+          name: システムパッケージのインストール
+          command: sudo apt-get update && sudo apt-get install -y libpq-dev
+      - restore_cache:
+          keys:
+            - gems-v1-{{ checksum "Gemfile.lock" }}
+            - gems-v1-
+      - run:
+          name: gemのインストール
+          command: bundle install --jobs 4
+      - save_cache:
+          key: gems-v1-{{ checksum "Gemfile.lock" }}
+          paths:
+            - vendor/bundle
+
+jobs:
+  test:
+    executor: rails
+    steps:
+      - checkout
+      - install_gems
+      - run:
+          name: データベースの起動を待つ
+          command: timeout 60 bash -c 'until (echo > /dev/tcp/127.0.0.1/5432) 2>/dev/null; do sleep 1; done'
+      - run:
+          name: データベースの準備
+          command: bin/rails db:create db:schema:load
+      - run:
+          name: RSpec
+          command: bundle exec rspec
+
+  security:
+    executor: ruby_only
+    steps:
+      - checkout
+      - install_gems
+      - run:
+          name: Brakeman(静的解析)
+          command: bin/brakeman --no-pager
+      - run:
+          name: Bundler Audit(依存gemの脆弱性チェック)
+          command: bin/bundler-audit
+
+  lint:
+    executor: ruby_only
+    steps:
+      - checkout
+      - install_gems
+      - run:
+          name: RuboCop
+          command: bin/rubocop
+
+workflows:
+  ci:
+    jobs:
+      - test
+      - security
+      - lint
