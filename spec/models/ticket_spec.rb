@@ -129,4 +129,24 @@ RSpec.describe Ticket, type: :model do
       expect(ticket.category).to be_nil
     end
   end
+
+  describe "表示用の日本語" do
+    it "ステータスを日本語で返す" do
+      expect(build(:ticket).status_text).to eq "受付済み"
+    end
+
+    it "優先度を日本語で返す" do
+      expect(build(:ticket).priority_text).to eq "通常"
+    end
+
+    it "選択肢を、表示名と値の組で返す" do
+      expect(Ticket.status_options).to include([ "対応中", "in_progress" ])
+    end
+
+    it "入力エラーのメッセージが日本語になる" do
+      ticket = build(:ticket, title: "")
+      ticket.valid?
+      expect(ticket.errors.full_messages).to include("件名を入力してください")
+    end
+  end
 end

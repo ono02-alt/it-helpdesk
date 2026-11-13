@@ -64,6 +64,12 @@ RSpec.describe "Tickets", type: :request do
       get ticket_path(ticket)
       expect(response.body).not_to include("更新する")
     end
+
+    it "ステータスが日本語で表示される" do
+      sign_in employee
+      get ticket_path(ticket)
+      expect(response.body).to include("受付済み")
+    end
   end
 
   describe "POST /tickets" do

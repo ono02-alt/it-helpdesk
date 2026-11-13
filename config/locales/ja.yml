@@ -1,0 +1,35 @@
+ja:
+  activerecord:
+    models:
+      user: ユーザー
+      ticket: 問い合わせ
+      category: カテゴリ
+    attributes:
+      user:
+        name: 名前
+        email_address: メールアドレス
+        password: パスワード
+        role: ロール
+      category:
+        name: カテゴリ名
+      ticket:
+        title: 件名
+        body: 内容
+        status: 状態
+        priority: 優先度
+        requester: 依頼者
+        assignee: 担当者
+        category: カテゴリ
+        resolved_at: 解決日時
+      ticket/statuses:
+        received: 受付済み
+        in_progress: 対応中
+        resolved: 解決済み
+        closed: 完了
+      ticket/priorities:
+        low: 低
+        normal: 通常
+        high: 高
+  time:
+    formats:
+      ticket: "%Y年%m月%d日 %H:%M"

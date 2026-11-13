@@ -20,12 +20,12 @@
       <tr>
         <td><%= ticket.id %></td>
         <td><%= link_to ticket.title, ticket %></td>
-        <td><%= ticket.status %></td>
-        <td><%= ticket.priority %></td>
+        <td><%= ticket.status_text %></td>
+        <td><%= ticket.priority_text %></td>
         <td><%= ticket.category&.name || "未分類" %></td>
         <td><%= ticket.requester.name %></td>
         <td><%= ticket.assignee&.name || "未割当" %></td>
-        <td><%= l ticket.created_at, format: :short %></td>
+        <td><%= l ticket.created_at, format: :ticket %></td>
       </tr>
     <% end %>
   </tbody>

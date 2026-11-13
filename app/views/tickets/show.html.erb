@@ -2,9 +2,9 @@
 
 <dl>
   <dt>状態</dt>
-  <dd><%= @ticket.status %></dd>
+  <dd><%= @ticket.status_text %></dd>
   <dt>優先度</dt>
-  <dd><%= @ticket.priority %></dd>
+  <dd><%= @ticket.priority_text %></dd>
   <dt>依頼者</dt>
   <dd><%= @ticket.requester.name %></dd>
   <dt>担当者</dt>
@@ -12,7 +12,7 @@
   <dt>カテゴリ</dt>
   <dd><%= @ticket.category&.name || "未分類" %></dd>
   <dt>受付日時</dt>
-  <dd><%= l @ticket.created_at, format: :short %></dd>
+  <dd><%= l @ticket.created_at, format: :ticket %></dd>
 </dl>
 
 <h2>内容</h2>
@@ -32,7 +32,7 @@
 
     <div>
       <%= form.label :status, "状態" %><br>
-      <%= form.select :status, Ticket.statuses.keys %>
+      <%= form.select :status, Ticket.status_options %>
     </div>
 
     <div>
@@ -47,7 +47,7 @@
 
     <div>
       <%= form.label :priority, "優先度" %><br>
-      <%= form.select :priority, Ticket.priorities.keys %>
+      <%= form.select :priority, Ticket.priority_options %>
     </div>
 
     <div>

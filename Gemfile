@@ -58,3 +58,5 @@ gem "shoulda-matchers", "~> 8.0", group: :test
 gem "capybara", "~> 3.40", group: :test
 
 gem "pundit", "~> 2.5"
+
+gem "rails-i18n", "~> 8.1"

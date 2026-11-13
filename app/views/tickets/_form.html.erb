@@ -19,7 +19,7 @@
 
   <div>
     <%= form.label :priority, "優先度" %><br>
-    <%= form.select :priority, Ticket.priorities.keys %>
+    <%= form.select :priority, Ticket.priority_options %>
   </div>
 
   <div>
