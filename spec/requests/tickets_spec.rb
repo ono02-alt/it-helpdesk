@@ -93,6 +93,15 @@ RSpec.describe "Tickets", type: :request do
       expect { post tickets_path, params: invalid }.not_to change(Ticket, :count)
       expect(response).to have_http_status(422)
     end
+
+    it "内容に応じて、カテゴリが自動で設定される" do
+      account = create(:category, name: "アカウント")
+      create(:category_rule, category: account, keyword: "パスワード")
+
+      post tickets_path, params: { ticket: { title: "ログインできない", body: "パスワードを忘れました" } }
+
+      expect(Ticket.last.category).to eq account
+    end
   end
 
   describe "PATCH /tickets/:id" do

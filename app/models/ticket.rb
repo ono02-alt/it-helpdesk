@@ -20,6 +20,7 @@ class Ticket < ApplicationRecord
   validate :status_transition_must_be_allowed, on: :update
 
   before_save :update_resolved_at, if: :status_changed?
+  before_validation :classify_automatically, on: :create
 
   private
 
@@ -43,5 +44,11 @@ class Ticket < ApplicationRecord
     elsif in_progress?
       self.resolved_at = nil
     end
+  end
+
+  def classify_automatically
+    return if category.present?
+
+    self.category = TicketClassifier.call("#{title} #{body}")
   end
 end

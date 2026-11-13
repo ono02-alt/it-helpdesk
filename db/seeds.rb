@@ -1,5 +1,16 @@
-%w[アカウント PC・端末 ネットワーク ソフトウェア その他].each do |name|
+categories = %w[アカウント PC・端末 ネットワーク ソフトウェア その他].index_with do |name|
   Category.find_or_create_by!(name: name)
+end
+
+{
+  "アカウント" => %w[パスワード ログイン ロック アカウント 権限],
+  "PC・端末" => %w[PC パソコン 画面 起動 キーボード マウス],
+  "ネットワーク" => %w[Wi-Fi ネット VPN 接続 遅い],
+  "ソフトウェア" => %w[インストール Excel Outlook アプリ 更新]
+}.each do |name, keywords|
+  keywords.each do |keyword|
+    CategoryRule.find_or_create_by!(category: categories[name], keyword: keyword)
+  end
 end
 
 if Rails.env.development?

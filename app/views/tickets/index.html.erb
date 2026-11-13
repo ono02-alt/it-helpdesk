@@ -9,6 +9,7 @@
       <th>件名</th>
       <th>状態</th>
       <th>優先度</th>
+      <th>カテゴリ</th>
       <th>依頼者</th>
       <th>担当者</th>
       <th>受付日時</th>
@@ -21,6 +22,7 @@
         <td><%= link_to ticket.title, ticket %></td>
         <td><%= ticket.status %></td>
         <td><%= ticket.priority %></td>
+        <td><%= ticket.category&.name || "未分類" %></td>
         <td><%= ticket.requester.name %></td>
         <td><%= ticket.assignee&.name || "未割当" %></td>
         <td><%= l ticket.created_at, format: :short %></td>

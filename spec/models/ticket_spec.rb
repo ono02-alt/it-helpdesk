@@ -106,4 +106,27 @@ RSpec.describe Ticket, type: :model do
       expect(ticket.resolved_at).to be_present
     end
   end
+
+  describe "自動分類" do
+    let!(:account) { create(:category, name: "アカウント") }
+
+    before { create(:category_rule, category: account, keyword: "パスワード") }
+
+    it "作成時にカテゴリが空なら、本文から自動で設定される" do
+      ticket = create(:ticket, body: "パスワードを忘れました")
+      expect(ticket.category).to eq account
+    end
+
+    it "カテゴリを指定して作成した場合は、上書きしない" do
+      other = create(:category)
+      ticket = create(:ticket, body: "パスワードを忘れました", category: other)
+      expect(ticket.category).to eq other
+    end
+
+    it "更新では自動分類しない" do
+      ticket = create(:ticket, body: "関係のない内容")
+      ticket.update!(body: "パスワードを忘れました")
+      expect(ticket.category).to be_nil
+    end
+  end
 end
