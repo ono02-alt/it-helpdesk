@@ -12,7 +12,7 @@ executors:
           BUNDLE_PATH: vendor/bundle
       - image: postgres:17
         environment:
-          POSTGRES_USER: postgres
+          POSTspec/modelsGRES_USER: postgres
           POSTGRES_PASSWORD: password
   ruby_only:
     docker:

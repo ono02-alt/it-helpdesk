@@ -11,6 +11,7 @@ class TicketsController < ApplicationController
   def show
     @ticket = policy_scope(Ticket).find(params[:id])
     authorize @ticket
+    load_form_options
   end
 
   def new
@@ -29,9 +30,30 @@ class TicketsController < ApplicationController
     end
   end
 
+  def update
+    @ticket = policy_scope(Ticket).find(params[:id])
+    authorize @ticket
+
+    if @ticket.update(staff_params)
+      redirect_to @ticket, notice: "問い合わせを更新しました。"
+    else
+      load_form_options
+      render :show, status: :unprocessable_content
+    end
+  end
+
   private
 
   def ticket_params
     params.expect(ticket: [ :title, :body, :priority ])
+  end
+
+  def staff_params
+    params.expect(ticket: [ :status, :assignee_id, :category_id, :priority ])
+  end
+
+  def load_form_options
+    @assignable_users = User.where(role: %i[it_staff admin]).order(:name)
+    @categories = Category.order(:name)
   end
 end

@@ -18,4 +18,42 @@
 <h2>内容</h2>
 <%= simple_format(h(@ticket.body)) %>
 
+<% if policy(@ticket).update? %>
+  <h2>対応状況の更新</h2>
+
+  <%= form_with model: @ticket do |form| %>
+    <% if @ticket.errors.any? %>
+      <ul>
+        <% @ticket.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    <% end %>
+
+    <div>
+      <%= form.label :status, "状態" %><br>
+      <%= form.select :status, Ticket.statuses.keys %>
+    </div>
+
+    <div>
+      <%= form.label :assignee_id, "担当者" %><br>
+      <%= form.collection_select :assignee_id, @assignable_users, :id, :name, include_blank: "未割当" %>
+    </div>
+
+    <div>
+      <%= form.label :category_id, "カテゴリ" %><br>
+      <%= form.collection_select :category_id, @categories, :id, :name, include_blank: "未分類" %>
+    </div>
+
+    <div>
+      <%= form.label :priority, "優先度" %><br>
+      <%= form.select :priority, Ticket.priorities.keys %>
+    </div>
+
+    <div>
+      <%= form.submit "更新する" %>
+    </div>
+  <% end %>
+<% end %>
+
 <p><%= link_to "一覧に戻る", tickets_path %></p>
